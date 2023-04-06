@@ -37,6 +37,7 @@ public class Restroom {
 		synchronized (this) {
 
 			if (isDirty == true) {
+				System.out.println(name + "Oh, it's dirty!");
 				waitOutSide(name);
 			}
 
@@ -72,23 +73,27 @@ public class Restroom {
 		System.out.println(name + " knocking at door");
 
 		synchronized (this) {
-			if(!isDirty){
+			System.out.println(name + " entering the restroom");
+
+			if (!this.isDirty) {
 				System.out.println(name + " It's clean yet!");
 				return;
 			}
-			System.out.println(name + "entering the restroom");
-			System.out.println("Cleanning");
 
+			System.out.println(name + " Cleanning");
+			this.isDirty = false;
+			
 			try {
 				Thread.sleep(13000);
 			} catch (InterruptedException e) {
 
 				e.printStackTrace();
 			}
-			System.out.println(name + " Leaving the restroom");
+
 		}
-		this.isDirty = false;
-		notifyAll();
+
+		this.notifyAll();
+		System.out.println(name + " Leaving the restroom");
 	}
 
 }

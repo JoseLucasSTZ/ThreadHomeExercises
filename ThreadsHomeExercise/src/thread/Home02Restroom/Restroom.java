@@ -7,28 +7,24 @@ public class Restroom {
 	public void pee() {
 
 		String name = Thread.currentThread().getName();
+
 		System.out.println(name + " is Knocking at door");
 
 		synchronized (this) {
 
-			System.out.println(name + " is Entering the restroom");
-
-			if (isDirty == true) {
-				waitOutSide(name);
-			}
+			WaitToClean(name);
 
 			System.out.println(name + " is Peeing");
 
-			try {
-				Thread.sleep(10000);
-			} catch (InterruptedException e) {
+			SleepABit(10000);
 
-				e.printStackTrace();
-			}
 			System.out.println(name + " is Flushing the toilet");
 			System.out.println(name + " is Washing hands");
 			System.out.println(name + " is Leaving the restroom");
 		}
+
+		this.isDirty = true;
+
 	}
 
 	public void poop() {
@@ -36,33 +32,37 @@ public class Restroom {
 		System.out.println(name + " is Knocking at door");
 		synchronized (this) {
 
-			if (isDirty == true) {
-				System.out.println(name + "Oh, it's dirty!");
-				waitOutSide(name);
-			}
+			WaitToClean(name);
 
 			System.out.println(name + " is Entering the restroom");
 			System.out.println(name + " is Pooping");
 
-			try {
-				Thread.sleep(30000);
-			} catch (InterruptedException e) {
-
-				e.printStackTrace();
-			}
+			SleepABit(20000);
 
 			System.out.println(name + " is Flushing the toilet");
 			System.out.println(name + " is Washing hands");
 			System.out.println(name + " is Leaving the restroom");
 		}
+		this.isDirty = true;
 	}
 
-	private void waitOutSide(String name) {
-		System.out.println(name + ": Oh no, it's dirty!");
+	private void WaitToClean(String name) {
+		while (isDirty == true) {
+			System.out.println(name + " Oh, it's dirty!");
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void SleepABit(int time) {
 		try {
-			this.wait();
+			Thread.sleep(time);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
 		}
 	}
@@ -75,14 +75,14 @@ public class Restroom {
 		synchronized (this) {
 			System.out.println(name + " entering the restroom");
 
-			if (!this.isDirty) {
+			if (this.isDirty == false) {
 				System.out.println(name + " It's clean yet!");
 				return;
 			}
 
 			System.out.println(name + " Cleanning");
 			this.isDirty = false;
-			
+
 			try {
 				Thread.sleep(13000);
 			} catch (InterruptedException e) {

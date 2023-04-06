@@ -10,6 +10,7 @@ public class main {
 		//Thread guest3 = new Thread(new Poop(restroom), "Tiffany");
 		//Thread guest4 = new Thread(new Pee(restroom), "Mary");
 		Thread cleanner = new Thread(new cleanTask(restroom), "Restroom cleanner");
+		cleanner.setDaemon(true);
 
 
 		guest1.start();
